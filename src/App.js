@@ -1,26 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { Tab, Tabs } from 'react-bootstrap'
+
+import './App.css'
+
+import Todos from './components/tabs/todos'
+import Users from './components/tabs/users'
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="container mt-5">
+        <Tabs defaultActiveKey="todos" id="uncontrolled-tab-example">
+          <Tab eventKey="todos" title="Todos">
+            <Todos />
+          </Tab>
+          <Tab eventKey="users" title="Users">
+            <Users />
+          </Tab>
+        </Tabs>
+      </div>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
