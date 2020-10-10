@@ -1,57 +1,86 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { Button, Table } from 'react-bootstrap'
 
-// TODO:
-// * 1. LIST USERS
-// * 2. GET USER
-// * 3. CREATE USER
-// * 4. UPDATE USER
-// * 5. DELETE USER
+import User from '../../../agent/User'
 
-const Users = () => {
+import UserDetailsModal from './userDetailsModal'
+import LoadingSpinner from '../../loadingSpinner'
+
+const Users = (props) => {
+  const [isLoading, setIsLoading] = useState(true)
+
+  const [users, setUsers] = useState([])
+  const [selectedUser, setSelectedUser] = useState(null)
+  const [modalOpen, setModalOpen] = useState(false)
+
+  const handleModalOpen = () => setModalOpen(true)
+  const handleModalClose = () => {
+    setModalOpen(false)
+    setSelectedUser(null)
+  }
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const usersResponse = await User.list()
+        setUsers(usersResponse.data.users)
+
+        setIsLoading(false)
+      } catch (err) {
+        console.error(err)
+        alert(err.message)
+      }
+    })()
+  }, [props])
+
   return (
     <div className="div mt-4">
+      <UserDetailsModal
+        modalOpen={modalOpen}
+        onModalClose={handleModalClose}
+        existingUser={selectedUser}
+      />
       <div className="d-flex justify-content-between mb-3">
         <h3>User List</h3>
-        <Button variant="primary">Add User</Button>
+        <Button onClick={handleModalOpen} variant="primary">
+          Add User
+        </Button>
       </div>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>User</th>
-            <th>Age</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>Mark</td>
-            <td>18</td>
-            <td>
-              <Button variant="primary">View</Button>
-            </td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Jacob</td>
-            <td>21</td>
-            <td>
-              <Button variant="primary">View</Button>
-            </td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Larry</td>
-            <td>50</td>
-            <td>
-              <Button variant="primary">View</Button>
-            </td>
-          </tr>
-        </tbody>
-      </Table>
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Age</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user.id}>
+                <td>{user.id}</td>
+                <td>{user.name}</td>
+                <td>{user.age}</td>
+                <td>
+                  <Button
+                    onClick={() => {
+                      setSelectedUser(user)
+                      setModalOpen(true)
+                    }}
+                    variant="primary"
+                  >
+                    View
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
     </div>
   )
 }

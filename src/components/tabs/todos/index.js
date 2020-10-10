@@ -7,15 +7,6 @@ import User from '../../../agent/User'
 import TodoDetailsModal from './todoDetailsModal'
 import LoadingSpinner from '../../loadingSpinner'
 
-// TODO:
-// * 1. LIST TODOS
-// * 2. GET TODO
-// * 3. CREATE TODO
-// * 4. UPDATE TODO
-// * 5. DELETE TODO
-
-// TODO: LIMIT BODY TO 25 CHARACTERS, SHOW FULL VERSION IN VIEW
-
 const Todos = (props) => {
   const [isLoading, setIsLoading] = useState(true)
 

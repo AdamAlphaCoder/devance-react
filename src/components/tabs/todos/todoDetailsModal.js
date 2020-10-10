@@ -104,7 +104,7 @@ const TodoDetailsModal = (props) => {
             <Form.Control
               value={todoForm.title}
               onChange={handleTitleChange}
-              type="email"
+              type="text"
               placeholder="Title"
               disabled={!editing}
             />
